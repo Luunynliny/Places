@@ -8,16 +8,17 @@ import {
   MeshStandardMaterial,
   PCFShadowMap,
   PerspectiveCamera,
-  PlaneGeometry,
   Scene,
   Timer,
   WebGLRenderer,
 } from "three";
-import { createFreeCam } from "./freecam";
-import { sceneBounds } from "./scene-data";
+import { createFreeCam } from "./freecam.ts";
+import { sceneBounds } from "./scene-data.ts";
+import { createFarShell, createNearTerrain, sampleHeight } from "./terrain.ts";
 
 const width = sceneBounds.maxX - sceneBounds.minX;
 const depth = sceneBounds.maxZ - sceneBounds.minZ;
+const SKY = 0x9aabb5;
 
 const renderer = new WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -27,11 +28,13 @@ renderer.shadowMap.type = PCFShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new Scene();
-scene.background = new Color(0x8fa3b0);
-scene.fog = new Fog(0x8fa3b0, width * 0.6, width * 2.5);
+scene.background = new Color(SKY);
+// Fog starts just past the clearing edge and closes before the far shell's horizon, so
+// the enclosure reads as haze over rising ground rather than a wall.
+scene.fog = new Fog(SKY, width * 0.85, 110);
 
-const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
-camera.position.set(0, 1.6, width / 2);
+const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 400);
+camera.position.set(0, sampleHeight(0, 10) + 1.6, 10);
 
 scene.add(new HemisphereLight(0xbcd4e6, 0x40332a, 1.2));
 
@@ -46,21 +49,15 @@ sun.shadow.camera.bottom = -depth;
 sun.shadow.camera.far = width * 4;
 scene.add(sun);
 
-// Placeholder shell: a flat ground the size of the bounds, and one box for scale.
-// Phase 1 replaces both with the authored near/far terrain grids.
-const ground = new Mesh(
-  new PlaneGeometry(width, depth),
-  new MeshStandardMaterial({ color: 0x6d7f6a, roughness: 1 }),
-);
-ground.rotation.x = -Math.PI / 2;
-ground.receiveShadow = true;
-scene.add(ground);
+scene.add(createNearTerrain());
+scene.add(createFarShell());
 
+// Scale reference, standing on the path. Goes away once real objects arrive in phase 3.
 const marker = new Mesh(
   new BoxGeometry(1, 1.8, 1),
   new MeshStandardMaterial({ color: 0xb4643c, roughness: 0.8 }),
 );
-marker.position.set(0, 0.9, -2);
+marker.position.set(0, sampleHeight(0, -2) + 0.9, -2);
 marker.castShadow = true;
 scene.add(marker);
 

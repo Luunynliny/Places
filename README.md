@@ -26,12 +26,13 @@ speed up, `Esc` to release.
 | `npm run check` | Biome lint + format check |
 | `npm run format` | Biome, writing fixes |
 | `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Node's built-in test runner over `src/**/*.test.ts` |
 
 ## Status
 
-Phase 0: project scaffold, free-cam 3D shell, CI, and automated releases. The Place itself
-(terrain, walk mode, objects, audio, weather) lands in phases 1-6 - see the build spec's
-milestones.
+Phase 1: the Place is a **cabin clearing** - 24x24m of authored terrain with a packed path
+running north to a rocky rise, enclosed by rising ground that fades into haze. Free-cam only.
+Walk mode, objects, audio and weather land in phases 2-6 - see the build spec's milestones.
 
 ## Contributing
 
