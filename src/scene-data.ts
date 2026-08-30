@@ -102,6 +102,8 @@ export const rain = {
   slant: 0.18,
 };
 
+export { TREE_STRIDE, treeline } from "./treeline-data.ts";
+
 export type BoxCollider = {
   type: "box";
   /** World-space centre, [x, y, z]. */

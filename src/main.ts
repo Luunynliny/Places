@@ -16,6 +16,7 @@ import { createMovers } from "./movers.ts";
 import { buildObjects } from "./objects/index.ts";
 import { colliders, sceneBounds } from "./scene-data.ts";
 import { createFarShell, createNearTerrain, sampleHeight } from "./terrain.ts";
+import { createTreeline } from "./treeline.ts";
 import { createWeather } from "./weather.ts";
 
 const width = sceneBounds.maxX - sceneBounds.minX;
@@ -53,6 +54,7 @@ scene.add(sun);
 
 scene.add(createNearTerrain());
 scene.add(createFarShell());
+scene.add(...createTreeline());
 
 const groups = buildObjects();
 scene.add(...groups);
