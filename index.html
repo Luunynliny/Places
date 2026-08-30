@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Places</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #0b0e12;
+      }
+      canvas {
+        display: block;
+      }
+      #hint {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        gap: 0.5rem;
+        color: #cfd6dd;
+        font: 14px/1.6 ui-sans-serif, system-ui, sans-serif;
+        text-align: center;
+        background: rgba(11, 14, 18, 0.85);
+        cursor: pointer;
+      }
+      #hint[hidden] {
+        display: none;
+      }
+      kbd {
+        background: #1b2027;
+        border-radius: 3px;
+        padding: 0 0.35em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hint">
+      <strong>Click to look around</strong>
+      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move &middot; <kbd>Q</kbd>/<kbd>E</kbd> down/up &middot; <kbd>Shift</kbd> faster &middot; <kbd>Esc</kbd> release</span>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
