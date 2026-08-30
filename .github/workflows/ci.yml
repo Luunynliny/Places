@@ -3,6 +3,8 @@ name: CI
 on:
   pull_request:
     branches: [develop, main]
+    # `edited` so a retitled PR is re-checked; without it a bad title stays red forever.
+    types: [opened, edited, synchronize, reopened]
   push:
     branches: [develop]
 
