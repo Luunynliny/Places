@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { Box3, Vector3 } from "three";
-import { colliders, objects } from "../scene-data.ts";
+import { colliders, objects, paths } from "../scene-data.ts";
 import { palette } from "../style.ts";
 import { sampleHeight } from "../terrain.ts";
 import { buildObjects, factories } from "./index.ts";
@@ -102,4 +102,40 @@ test("every collider that guards an object covers most of its footprint", () => 
     const covered = (sx * sz) / (size.x * size.z);
     assert.ok(covered > 0.6, `${collider.for} collider covers only ${(covered * 100).toFixed(0)}%`);
   }
+});
+
+test("objects that follow a path name one that exists and is actually a route", () => {
+  for (const entry of objects.filter((o) => o.path)) {
+    const path = paths[String(entry.path)];
+    assert.ok(path, `"${entry.id}" follows path "${entry.path}", which is not defined`);
+    assert.ok(path.length >= 2, `path "${entry.path}" needs at least two points to be a route`);
+    assert.ok((entry.pathSeconds ?? 0) > 0, `"${entry.id}" needs a positive pathSeconds`);
+  }
+});
+
+test("a path-driven object is not also pinned to the ground", () => {
+  for (const entry of objects.filter((o) => o.path)) {
+    assert.ok(!entry.grounded, `"${entry.id}" cannot both follow a path and sit on the terrain`);
+  }
+});
+
+test("a plane pointed along its path flies nose-first, not tail-first", () => {
+  const plane = factories.createPlaneModel?.();
+  assert.ok(plane, "there is no plane factory to check");
+
+  const target = new Vector3(0, 0, 100);
+  plane.position.set(0, 0, 0);
+  plane.lookAt(target);
+  plane.updateMatrixWorld(true);
+
+  const propeller = plane.getObjectByName("propeller");
+  assert.ok(propeller, "the plane has no propeller to orient by");
+  const nose = propeller.getWorldPosition(new Vector3());
+
+  // Object3D.lookAt() points +Z at the target for anything that is not a camera or light,
+  // so a model built nose-toward--Z would put the propeller on the far side from travel.
+  assert.ok(
+    nose.distanceTo(target) < plane.position.distanceTo(target),
+    `the propeller ended up behind the aircraft: it is at z=${nose.z.toFixed(2)}`,
+  );
 });

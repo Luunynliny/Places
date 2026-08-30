@@ -1,0 +1,29 @@
+{
+  "$comment": "Derived from docs/style-guide.json's mood adjectives, so the audio matches the visual mood instead of being invented independently. This is the path the soundscape-composer agent reads and writes.",
+  "mood": ["cold", "quiet", "overcast", "sparse", "warm accents indoors"],
+  "character": {
+    "lowpassHz": 700,
+    "reverb": "none - open air over soft ground, a clearing has almost nothing to reflect off",
+    "note": "Nothing here is bright. Cold air and wet conifers roll everything off early."
+  },
+  "ambientBed": {
+    "file": "audio/ambient-bed.wav",
+    "present": false,
+    "volume": 0.35,
+    "prompt": "A cold, still, overcast afternoon in a small forest clearing. Sparse wind moving through wet conifers, distant and directionless. No birdsong, no water, no human activity. Very low, wide and quiet, with room left above it to hear a single distant aircraft. Seamless loop, no discernible events.",
+    "note": "Generate this once with an AI soundscape tool, export a seamless WAV to public/audio/ambient-bed.wav, then flip `present` to true. Nothing loads it until then, so the console stays clean instead of reporting a missing file every session."
+  },
+  "planeEngine": {
+    "note": "Synthesised live through THREE.PositionalAudio rather than loaded from a file: a prop drone is a handful of detuned partials, and a live source has no loop seam to click at.",
+    "volume": 0.55,
+    "refDistance": 20,
+    "rolloffFactor": 2.5,
+    "fundamentalHz": 82,
+    "partials": [1, 1.5, 2.02, 2.99],
+    "partialGains": [1, 0.5, 0.32, 0.16],
+    "detuneCents": [0, 7, -6, 4],
+    "lowpassHz": 700,
+    "bladePassHz": 26,
+    "bladeDepth": 0.35
+  }
+}
