@@ -1,11 +1,8 @@
 import {
-  BoxGeometry,
   Color,
   DirectionalLight,
   Fog,
   HemisphereLight,
-  Mesh,
-  MeshStandardMaterial,
   PCFShadowMap,
   PerspectiveCamera,
   Scene,
@@ -14,6 +11,7 @@ import {
 } from "three";
 import { createCameraRig } from "./camera-modes.ts";
 import { boundaryColliders } from "./collision.ts";
+import { buildObjects } from "./objects/index.ts";
 import { colliders, sceneBounds } from "./scene-data.ts";
 import { createFarShell, createNearTerrain, sampleHeight } from "./terrain.ts";
 
@@ -52,15 +50,7 @@ scene.add(sun);
 
 scene.add(createNearTerrain());
 scene.add(createFarShell());
-
-// Scale reference, standing on the path. Goes away once real objects arrive in phase 3.
-const marker = new Mesh(
-  new BoxGeometry(1, 1.8, 1),
-  new MeshStandardMaterial({ color: 0xb4643c, roughness: 0.8 }),
-);
-marker.position.set(0, sampleHeight(0, -2) + 0.9, -2);
-marker.castShadow = true;
-scene.add(marker);
+scene.add(...buildObjects());
 
 const rig = createCameraRig(camera, renderer.domElement, {
   colliders: [...boundaryColliders(), ...colliders],

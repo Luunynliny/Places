@@ -1,0 +1,27 @@
+{
+  "$comment": "Shared palette and mood for the whole Place. Authored by hand while the object count is small; docs/style-guide.json is the path the style-colorist agent reads and writes. Object code imports this, so hand-built objects cannot drift - the agent's audit mode is for generated objects, which arrive with their colours already baked in.",
+  "mood": ["cold", "quiet", "overcast", "sparse", "warm accents indoors"],
+  "palette": {
+    "sky": "#9aabb5",
+    "turf": "#5f7048",
+    "path": "#9b8a68",
+    "rock": "#8b8880",
+    "litter": "#4a4433",
+    "distantGround": "#6f7d61",
+    "timber": "#6b5138",
+    "timberDark": "#4e3a28",
+    "roof": "#3f4348",
+    "stone": "#7c7871",
+    "metal": "#b9bec2",
+    "metalDark": "#6e767c",
+    "lampGlow": "#e8b878"
+  },
+  "materials": {
+    "note": "Everything outdoors is fully rough. Nothing in this Place is polished; the only shine arrives with wet weather in phase 5.",
+    "roughness": 0.95,
+    "metalness": 0
+  },
+  "objects": {
+    "$comment": "Registry of generated objects and any palette corrections applied to them, so drift is tracked over time. Empty while every object is hand-built from the palette above."
+  }
+}

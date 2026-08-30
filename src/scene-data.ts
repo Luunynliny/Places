@@ -76,12 +76,26 @@ export type BoxCollider = {
   center: [number, number, number];
   /** Full extents, [x, y, z]. */
   size: [number, number, number];
+  /**
+   * The object this collider belongs to, when it has one. A test checks the collider does
+   * not reach beyond that object's own bounds: a collider may be smaller than the thing it
+   * guards (you can walk under a roof overhang) but must never block empty air.
+   */
+  for?: string;
 };
 
 export type Collider = BoxCollider;
 
-/** Solid volumes walk mode collides against. Filled in as objects are placed. */
-export const colliders: Collider[] = [];
+/**
+ * Solid volumes walk mode collides against, in world space — so they already include the
+ * object's position and must be kept in step by hand when an object moves.
+ * The clearing's own edges are not listed here; boundaryColliders() derives those.
+ */
+export const colliders: Collider[] = [
+  // Plinth and walls only — the roof overhangs them by 0.3m and you can stand under it.
+  { type: "box", center: [0, 1.9, -8.5], size: [5.2, 3, 4.2], for: "cabin" },
+  { type: "box", center: [3.39, 0.93, -7.2], size: [1, 0.79, 1.58], for: "woodpile" },
+];
 
 export type SceneObject = {
   id: string;
@@ -90,12 +104,29 @@ export type SceneObject = {
   position: [number, number, number];
   /** Y rotation in radians. */
   rotation?: number;
+  /**
+   * True when the object sits on the terrain, meaning position[1] must equal the ground
+   * height there. A test enforces it, so editing terrainHeights under an object fails
+   * loudly instead of leaving it hovering.
+   */
+  grounded?: boolean;
   /** Key in `paths` for objects that move along a scripted route. */
   path?: string;
 };
 
 /** Every object in the Place, placed at a fixed position. */
-export const objects: SceneObject[] = [];
+export const objects: SceneObject[] = [
+  { id: "cabin", factory: "createCabinModel", position: [0, 0.7, -8.5], grounded: true },
+  {
+    id: "woodpile",
+    factory: "createWoodpileModel",
+    position: [3.4, 0.5871, -7.2],
+    rotation: Math.PI / 2,
+    grounded: true,
+  },
+  // Crossing the sky to the north-west. Phase 4 gives it a path and an engine.
+  { id: "plane", factory: "createPlaneModel", position: [-34, 27, -46], rotation: -0.5 },
+];
 
 /** Scripted routes, as plain point lists. Sampled with pointOnPath(). */
 export const paths: Record<string, [number, number, number][]> = {};
