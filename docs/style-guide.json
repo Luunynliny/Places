@@ -14,7 +14,8 @@
     "stone": "#7c7871",
     "metal": "#b9bec2",
     "metalDark": "#6e767c",
-    "lampGlow": "#e8b878"
+    "lampGlow": "#e8b878",
+    "rain": "#aebac1"
   },
   "materials": {
     "note": "Everything outdoors is fully rough. Nothing in this Place is polished; the only shine arrives with wet weather in phase 5.",

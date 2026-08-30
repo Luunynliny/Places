@@ -30,14 +30,22 @@ flying, `Esc` to release. Flying adds `Q`/`E` for down/up and `Shift` to speed u
 
 ## Status
 
-Phase 4: the Place is a **cabin clearing** - 24x24m of authored terrain with a packed path
+Phase 5: the Place is a **cabin clearing** - 24x24m of authored terrain with a packed path
 running north to a lit cabin on a rocky rise, a woodpile against its east wall, a small plane
 crossing the sky on a scripted route with its engine audible as it passes, and rising
-ground fading into haze at the edges. You can walk it at a
+ground fading into haze at the edges. Rain comes and goes on a five-minute cycle, darkening
+every surface and filling the clearing with noise as it builds. You can walk it at a
 deliberate 1.2 m/s, pinned to the ground and stopped by the cabin, the woodpile and the
 clearing edge, or switch to free-cam and fly through everything.
 
-Weather lands in phases 5-6 - see the build spec's milestones.
+Phase 6 is the finishing pass - see the build spec's milestones.
+
+### Weather
+
+One `weatherIntensity` value drives all three responses at once: the visible rain, how wet
+and dark every surface looks, and the sound. It follows an authored curve in
+`src/scene-data.ts` - weather is the one thing in a Place that is deliberately different
+each time you look up.
 
 ### The ambient bed
 

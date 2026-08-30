@@ -171,7 +171,8 @@ The repo is seeded at `v0.0.0` so releases stay in `0.x` until v0 is done.
 - **Layout is data.** Positions, sizes, colliders and paths live in `src/scene-data.ts`, which
   never imports Three.js. Render code reads it; it never hardcodes a position.
 - **Nothing is generated at runtime.** No `Math.random()`, no noise functions deciding what the
-  scene looks like. A variant chosen while authoring is written down as a fixed value.
+  scene looks like. A variant chosen while authoring is written down as a fixed value. The one
+  exception is scatter inside the weather system, which is not layout and is allowed to vary.
 - **Only movement and weather change.** Everything else is identical every session.
 - **Ground height comes from the data, not a raycast.** `sampleHeight()` reads the same
   authored heightfield the terrain mesh is built from, so it is exact and needs no scene
@@ -180,6 +181,6 @@ The repo is seeded at `v0.0.0` so releases stay in `0.x` until v0 is done.
 
 ## Dependencies
 
-Add a dependency in the phase that renders it, not before. `tone` arrives with the weather
-phase, a test runner with the first real logic. Three.js addons (`three/addons/...`) ship with
+Add a dependency in the phase that renders it, not before. `tone` arrived with the weather
+phase; the test runner is Node's own, so there is none to add. Three.js addons (`three/addons/...`) ship with
 `three` and are not extra dependencies.
