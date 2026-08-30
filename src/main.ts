@@ -9,8 +9,10 @@ import {
   Timer,
   WebGLRenderer,
 } from "three";
+import { createAudio } from "./audio.ts";
 import { createCameraRig } from "./camera-modes.ts";
 import { boundaryColliders } from "./collision.ts";
+import { createMovers } from "./movers.ts";
 import { buildObjects } from "./objects/index.ts";
 import { colliders, sceneBounds } from "./scene-data.ts";
 import { createFarShell, createNearTerrain, sampleHeight } from "./terrain.ts";
@@ -50,7 +52,14 @@ scene.add(sun);
 
 scene.add(createNearTerrain());
 scene.add(createFarShell());
-scene.add(...buildObjects());
+
+const groups = buildObjects();
+scene.add(...groups);
+const movers = createMovers(groups);
+
+const audio = createAudio(camera);
+const plane = groups.find((group) => group.name === "plane");
+if (plane) audio.attachEngine(plane);
 
 const rig = createCameraRig(camera, renderer.domElement, {
   colliders: [...boundaryColliders(), ...colliders],
@@ -59,7 +68,10 @@ const rig = createCameraRig(camera, renderer.domElement, {
 
 const hint = document.getElementById("hint");
 hint?.addEventListener("click", () => rig.controls.lock());
-rig.controls.addEventListener("lock", () => hint?.setAttribute("hidden", ""));
+rig.controls.addEventListener("lock", () => {
+  audio.resume();
+  hint?.setAttribute("hidden", "");
+});
 rig.controls.addEventListener("unlock", () => hint?.removeAttribute("hidden"));
 
 window.addEventListener("resize", () => {
@@ -75,6 +87,8 @@ const MAX_DELTA = 0.1;
 
 renderer.setAnimationLoop((time) => {
   timer.update(time);
-  rig.update(Math.min(timer.getDelta(), MAX_DELTA));
+  const delta = Math.min(timer.getDelta(), MAX_DELTA);
+  movers.update(delta);
+  rig.update(delta);
   renderer.render(scene, camera);
 });
