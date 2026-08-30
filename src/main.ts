@@ -16,6 +16,7 @@ import { createMovers } from "./movers.ts";
 import { buildObjects } from "./objects/index.ts";
 import { colliders, sceneBounds } from "./scene-data.ts";
 import { createFarShell, createNearTerrain, sampleHeight } from "./terrain.ts";
+import { createWeather } from "./weather.ts";
 
 const width = sceneBounds.maxX - sceneBounds.minX;
 const depth = sceneBounds.maxZ - sceneBounds.minZ;
@@ -61,6 +62,9 @@ const audio = createAudio(camera);
 const plane = groups.find((group) => group.name === "plane");
 if (plane) audio.attachEngine(plane);
 
+// After everything else is in the scene: weather remembers how dry each surface looked.
+const weather = createWeather(scene, camera, audio.listener);
+
 const rig = createCameraRig(camera, renderer.domElement, {
   colliders: [...boundaryColliders(), ...colliders],
   groundHeight: sampleHeight,
@@ -89,6 +93,7 @@ renderer.setAnimationLoop((time) => {
   timer.update(time);
   const delta = Math.min(timer.getDelta(), MAX_DELTA);
   movers.update(delta);
+  weather.update(delta);
   rig.update(delta);
   renderer.render(scene, camera);
 });

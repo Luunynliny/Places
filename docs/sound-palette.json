@@ -13,6 +13,14 @@
     "prompt": "A cold, still, overcast afternoon in a small forest clearing. Sparse wind moving through wet conifers, distant and directionless. No birdsong, no water, no human activity. Very low, wide and quiet, with room left above it to hear a single distant aircraft. Seamless loop, no discernible events.",
     "note": "Generate this once with an AI soundscape tool, export a seamless WAV to public/audio/ambient-bed.wav, then flip `present` to true. Nothing loads it until then, so the console stays clean instead of reporting a missing file every session."
   },
+  "rain": {
+    "note": "Live-synthesised with Tone.js rather than a loop, so it scales smoothly with weatherIntensity and never repeats. Pink noise reads wetter than white; the filter opens as the rain gets heavier.",
+    "quietDb": -24,
+    "loudDb": -8,
+    "filterHzAtCalm": 620,
+    "filterHzAtDownpour": 1700,
+    "filterQ": 0.6
+  },
   "planeEngine": {
     "note": "Synthesised live through THREE.PositionalAudio rather than loaded from a file: a prop drone is a handful of detuned partials, and a live source has no loop seam to click at.",
     "volume": 0.55,

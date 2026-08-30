@@ -1,4 +1,5 @@
 import { BufferAttribute, Color, Mesh, MeshStandardMaterial, PlaneGeometry } from "three";
+import { sampleProfile } from "./path.ts";
 import {
   farProfile,
   sceneBounds,
@@ -55,21 +56,13 @@ export function sampleSurfaceColor(x: number, z: number, target: Color): Color {
   return target.copy(north).lerp(south, tz);
 }
 
-/** Height of the land beyond the clearing, from the authored radial profile. */
+/**
+ * Height of the land beyond the clearing. Chebyshev distance, not Euclidean, so the
+ * profile's contours are square rings that match the square clearing instead of rising
+ * over its corners and pushing through the near mesh.
+ */
 export function sampleFarHeight(x: number, z: number): number {
-  const distance = Math.max(Math.abs(x), Math.abs(z));
-  const first = farProfile[0];
-  const last = farProfile[farProfile.length - 1];
-  if (!first || !last) return 0;
-  if (distance <= first[0]) return first[1];
-  for (let i = 1; i < farProfile.length; i++) {
-    const a = farProfile[i - 1];
-    const b = farProfile[i];
-    if (a && b && distance <= b[0]) {
-      return lerp(a[1], b[1], (distance - a[0]) / (b[0] - a[0]));
-    }
-  }
-  return last[1];
+  return sampleProfile(farProfile, Math.max(Math.abs(x), Math.abs(z)));
 }
 
 /**
