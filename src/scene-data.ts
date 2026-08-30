@@ -110,8 +110,13 @@ export type SceneObject = {
    * loudly instead of leaving it hovering.
    */
   grounded?: boolean;
-  /** Key in `paths` for objects that move along a scripted route. */
+  /**
+   * Key in `paths` for objects that move along a scripted route. A path takes over the
+   * object's position entirely, so `position` is only where it sits before the first frame.
+   */
   path?: string;
+  /** Seconds for one full pass along `path`, before it loops. */
+  pathSeconds?: number;
 };
 
 /** Every object in the Place, placed at a fixed position. */
@@ -124,9 +129,26 @@ export const objects: SceneObject[] = [
     rotation: Math.PI / 2,
     grounded: true,
   },
-  // Crossing the sky to the north-west. Phase 4 gives it a path and an engine.
-  { id: "plane", factory: "createPlaneModel", position: [-34, 27, -46], rotation: -0.5 },
+  {
+    id: "plane",
+    factory: "createPlaneModel",
+    position: [150, 34, 130],
+    path: "flyover",
+    pathSeconds: 78,
+  },
 ];
 
-/** Scripted routes, as plain point lists. Sampled with pointOnPath(). */
-export const paths: Record<string, [number, number, number][]> = {};
+/**
+ * Scripted routes, as plain point lists. Sampled with pointOnPath().
+ *
+ * The flyover starts and ends far outside the fog's reach, so the loop back to the first
+ * point happens where nothing can be seen and never reads as a teleport.
+ */
+export const paths: Record<string, [number, number, number][]> = {
+  flyover: [
+    [150, 34, 130],
+    [60, 36, 44],
+    [-30, 40, -52],
+    [-140, 46, -150],
+  ],
+};
