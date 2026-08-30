@@ -161,8 +161,8 @@ feature branch ──PR (squash)──▶ develop ──PR (merge commit)──�
 Conventional Commits, enforced locally by a husky `commit-msg` hook (installed automatically
 by `npm install`) and on PR titles in CI.
 
-`feat:` → minor, `fix:` → patch, `feat!:`/`BREAKING CHANGE:` → major. `chore:`, `docs:`,
-`refactor:`, `test:`, `ci:`, `style:`, `perf:` do not release on their own.
+`feat:` → minor, `feat!:`/`BREAKING CHANGE:` → major, everything else → patch. Every merge to
+`main` cuts a release, so `main` should only ever receive finished work.
 
 The repo is seeded at `v0.0.0` so releases stay in `0.x` until v0 is done.
 
