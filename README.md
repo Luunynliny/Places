@@ -30,15 +30,19 @@ flying, `Esc` to release. Flying adds `Q`/`E` for down/up and `Shift` to speed u
 
 ## Status
 
-Phase 5: the Place is a **cabin clearing** - 24x24m of authored terrain with a packed path
+**v0 is complete.** The Place is a **cabin clearing** - 24x24m of authored terrain with a packed path
 running north to a lit cabin on a rocky rise, a woodpile against its east wall, a small plane
-crossing the sky on a scripted route with its engine audible as it passes, and rising
-ground fading into haze at the edges. Rain comes and goes on a five-minute cycle, darkening
-every surface and filling the clearing with noise as it builds. You can walk it at a
+crossing the sky on a scripted route with its engine audible as it passes, and a treeline
+enclosing it on every side but the south, where the path leads away into the forest. Rain
+comes and goes on a five-minute cycle, darkening every surface and filling the clearing with
+noise as it builds. You can walk it at a
 deliberate 1.2 m/s, pinned to the ground and stopped by the cabin, the woodpile and the
 clearing edge, or switch to free-cam and fly through everything.
 
-Phase 6 is the finishing pass - see the build spec's milestones.
+Everything the [build spec](places-build-spec.md) set out for v0 is in: the data model, the
+terrain shell, walk and free-cam modes, objects with colliders, scripted movement, audio and
+weather. The one thing still outstanding is the ambient bed, below - it wants a generated WAV
+rather than code.
 
 ### Weather
 
@@ -58,6 +62,12 @@ shows up as a console error.
 
 The plane's engine needs no file: it is synthesised live and fed through
 `THREE.PositionalAudio`, so it pans and attenuates with the aircraft and has no loop seam.
+
+### Authoring the treeline
+
+`scripts/author-treeline.mjs` lays out the trees once and prints them; the output is pasted
+into `src/treeline-data.ts` as fixed data. Nothing about the treeline is decided at runtime -
+re-run the script only when you want a different forest, and commit what it prints.
 
 ### Adding an object
 

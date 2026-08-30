@@ -106,9 +106,9 @@ export function createNearTerrain(): Mesh {
  * Everything past the clearing edge: coarse grid, no shadows, one flat colour that the
  * fog does most of the work on. Detail effort goes where the player can actually get close.
  *
- * ponytail: one flat colour, so the enclosing slope reads as a featureless band above the
- * treeline height. Instanced treeline foliage along the clearing edge is what breaks that
- * silhouette up; add it when the edge starts looking wrong rather than merely plain.
+ * ponytail: one flat colour. The treeline now breaks up the silhouette, which was the part
+ * that actually read wrong; what is left is that ground seen down the path has no surface
+ * variation. Give it vertex colours the way the near mesh has them if that starts to show.
  */
 export function createFarShell(): Mesh {
   const geometry = new PlaneGeometry(FAR_EXTENT, FAR_EXTENT, FAR_SEGMENTS, FAR_SEGMENTS);

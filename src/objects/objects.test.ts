@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { Box3, Vector3 } from "three";
-import { colliders, objects, paths } from "../scene-data.ts";
+import { colliders, objects, paths, TREE_STRIDE, treeline } from "../scene-data.ts";
 import { palette } from "../style.ts";
 import { sampleHeight } from "../terrain.ts";
 import { buildObjects, factories } from "./index.ts";
@@ -137,5 +137,41 @@ test("a plane pointed along its path flies nose-first, not tail-first", () => {
   assert.ok(
     nose.distanceTo(target) < plane.position.distanceTo(target),
     `the propeller ended up behind the aircraft: it is at z=${nose.z.toFixed(2)}`,
+  );
+});
+
+test("the treeline is well-formed and stays outside the walkable clearing", () => {
+  assert.equal(treeline.length % TREE_STRIDE, 0, "the flat array must divide by its stride");
+  assert.ok(treeline.length > 0, "there is no treeline");
+
+  for (let i = 0; i < treeline.length; i += TREE_STRIDE) {
+    const [x, z, scale, , variant] = treeline.slice(i, i + TREE_STRIDE);
+    assert.ok(x !== undefined && z !== undefined);
+    assert.ok(
+      Math.max(Math.abs(x), Math.abs(z)) > 12,
+      `a tree at ${x}, ${z} stands inside the clearing, where nothing stops you walking into it`,
+    );
+    assert.ok((scale ?? 0) > 0, "a tree has no size");
+    assert.ok(Number.isInteger(variant) && (variant ?? -1) >= 0, "a tree has an invalid variant");
+  }
+});
+
+test("the path out of the clearing reads as a corridor, open near and closed far", () => {
+  let closesTheFarEnd = false;
+
+  for (let i = 0; i < treeline.length; i += TREE_STRIDE) {
+    const x = treeline[i] ?? 0;
+    const z = treeline[i + 1] ?? 0;
+    if (Math.abs(x) >= 3.4) continue;
+
+    if (z > 10 && z < 30) {
+      assert.fail(`a tree at ${x}, ${z} blocks the corridor where it should still be open`);
+    }
+    if (z >= 30) closesTheFarEnd = true;
+  }
+
+  assert.ok(
+    closesTheFarEnd,
+    "nothing closes the far end of the corridor, so the path runs out to the edge of the world",
   );
 });
