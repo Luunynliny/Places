@@ -12,8 +12,9 @@ import {
   Timer,
   WebGLRenderer,
 } from "three";
-import { createFreeCam } from "./freecam.ts";
-import { sceneBounds } from "./scene-data.ts";
+import { createCameraRig } from "./camera-modes.ts";
+import { boundaryColliders } from "./collision.ts";
+import { colliders, sceneBounds } from "./scene-data.ts";
 import { createFarShell, createNearTerrain, sampleHeight } from "./terrain.ts";
 
 const width = sceneBounds.maxX - sceneBounds.minX;
@@ -61,12 +62,15 @@ marker.position.set(0, sampleHeight(0, -2) + 0.9, -2);
 marker.castShadow = true;
 scene.add(marker);
 
-const freeCam = createFreeCam(camera, renderer.domElement);
+const rig = createCameraRig(camera, renderer.domElement, {
+  colliders: [...boundaryColliders(), ...colliders],
+  groundHeight: sampleHeight,
+});
 
 const hint = document.getElementById("hint");
-hint?.addEventListener("click", () => freeCam.controls.lock());
-freeCam.controls.addEventListener("lock", () => hint?.setAttribute("hidden", ""));
-freeCam.controls.addEventListener("unlock", () => hint?.removeAttribute("hidden"));
+hint?.addEventListener("click", () => rig.controls.lock());
+rig.controls.addEventListener("lock", () => hint?.setAttribute("hidden", ""));
+rig.controls.addEventListener("unlock", () => hint?.removeAttribute("hidden"));
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -75,8 +79,12 @@ window.addEventListener("resize", () => {
 });
 
 const timer = new Timer();
+// A backgrounded tab returns with a delta of many seconds; capping it keeps that first
+// frame from teleporting the camera across the Place.
+const MAX_DELTA = 0.1;
+
 renderer.setAnimationLoop((time) => {
   timer.update(time);
-  freeCam.update(timer.getDelta());
+  rig.update(Math.min(timer.getDelta(), MAX_DELTA));
   renderer.render(scene, camera);
 });

@@ -34,6 +34,9 @@
       #hint[hidden] {
         display: none;
       }
+      .dim {
+        opacity: 0.6;
+      }
       kbd {
         background: #1b2027;
         border-radius: 3px;
@@ -44,7 +47,8 @@
   <body>
     <div id="hint">
       <strong>Click to look around</strong>
-      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move &middot; <kbd>Q</kbd>/<kbd>E</kbd> down/up &middot; <kbd>Shift</kbd> faster &middot; <kbd>Esc</kbd> release</span>
+      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move &middot; <kbd>V</kbd> walk / fly &middot; <kbd>Esc</kbd> release</span>
+      <span class="dim">Flying adds <kbd>Q</kbd>/<kbd>E</kbd> for down/up and <kbd>Shift</kbd> to speed up.</span>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

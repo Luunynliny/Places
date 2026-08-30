@@ -173,6 +173,9 @@ The repo is seeded at `v0.0.0` so releases stay in `0.x` until v0 is done.
 - **Nothing is generated at runtime.** No `Math.random()`, no noise functions deciding what the
   scene looks like. A variant chosen while authoring is written down as a fixed value.
 - **Only movement and weather change.** Everything else is identical every session.
+- **Ground height comes from the data, not a raycast.** `sampleHeight()` reads the same
+  authored heightfield the terrain mesh is built from, so it is exact and needs no scene
+  traversal. Raycasting comes back when objects have walkable surfaces to stand on.
 - Use the `place-authoring` skill when placing or wiring objects.
 
 ## Dependencies
