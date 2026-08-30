@@ -70,6 +70,38 @@ export const farProfile: [distance: number, height: number][] = [
   [200, 30],
 ];
 
+/**
+ * Weather is one of the only two things that change while you are inside, so unlike
+ * everything else here it is a curve rather than a constant: intensity against seconds
+ * into the cycle. It starts on a light drizzle so the Place is never dry on arrival, and
+ * ends back on that same value so the loop has no seam.
+ */
+export const weatherCycle: [seconds: number, intensity: number][] = [
+  [0, 0.35],
+  [40, 0.72],
+  [95, 1],
+  [150, 0.45],
+  [215, 0.08],
+  [265, 0],
+  [300, 0.35],
+];
+
+export const weatherCycleSeconds = 300;
+
+/** The rain itself. Authored once; only its intensity varies. */
+export const rain = {
+  /** Streaks in the column that follows you around. */
+  count: 5000,
+  /** Width and depth of that column, in metres. It only needs to cover what you can see. */
+  area: 30,
+  height: 16,
+  /** Metres per second, and how much of that a streak is long. */
+  speed: 16,
+  streak: 0.55,
+  /** Sideways lean, in metres of drift per metre of fall. */
+  slant: 0.18,
+};
+
 export type BoxCollider = {
   type: "box";
   /** World-space centre, [x, y, z]. */
