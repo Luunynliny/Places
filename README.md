@@ -13,8 +13,8 @@ npm install
 npm run dev
 ```
 
-Click the canvas to capture the pointer. `WASD` to move, `Q`/`E` for down/up, `Shift` to
-speed up, `Esc` to release.
+Click the canvas to capture the pointer. `WASD` to move, `V` to switch between walking and
+flying, `Esc` to release. Flying adds `Q`/`E` for down/up and `Shift` to speed up.
 
 ## Scripts
 
@@ -30,9 +30,11 @@ speed up, `Esc` to release.
 
 ## Status
 
-Phase 1: the Place is a **cabin clearing** - 24x24m of authored terrain with a packed path
-running north to a rocky rise, enclosed by rising ground that fades into haze. Free-cam only.
-Walk mode, objects, audio and weather land in phases 2-6 - see the build spec's milestones.
+Phase 2: the Place is a **cabin clearing** - 24x24m of authored terrain with a packed path
+running north to a rocky rise, enclosed by rising ground that fades into haze. You can walk it
+at a deliberate 1.2 m/s, pinned to the ground and stopped at the edges, or switch to free-cam
+and fly through everything. Objects, audio and weather land in phases 3-6 - see the build
+spec's milestones.
 
 ## Contributing
 
